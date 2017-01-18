@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Powered Email</title>
+</head>
+<body>
+    <h1>Weather Powered Email</h1>
+    <form action="{% url 'subscribe' %}" method="post">
+        {% csrf_token %}
+        <input type="email" name="email_address" id="email_address" />
+        <div class="dropdown">
+            <ul class="dropdown-menu">
+                {% for location in cities.all %}
+                    <li><a href="#">location</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <input type="submit" value="Subscribe" />
+    </form>
+</body>
+</html>
