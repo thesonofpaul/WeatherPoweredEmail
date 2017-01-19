@@ -6,15 +6,17 @@
 </head>
 <body>
     <h1>Weather Powered Email</h1>
-    <form action="{% url 'subscribe' %}" method="post">
+
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+    <form action="{% url 'submit' %}" method="post">
         {% csrf_token %}
         <input type="email" name="email_address" id="email_address" />
-        <div class="dropdown">
-            <ul class="dropdown-menu">
-                {% for location in cities.all %}
-                    <li><a href="#">location</a></li>
-                {% endfor %}
-            </ul>
+        <div>
+            {% for city in cities %}
+                <input type="radio" name="city" id="city{{ city.id }}" value="{{ city.id }}">
+                    <label for="city{{ city.id }}">{{ city }}</label><br />
+            {% endfor %}
         </div>
         <input type="submit" value="Subscribe" />
     </form>
