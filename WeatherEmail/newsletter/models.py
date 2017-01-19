@@ -9,7 +9,8 @@ class Cities(models.Model):
         return '{}, {}'.format(self.city, self.state)
     pass
 
-class Email_List(models.Model):
+
+class EmailList(models.Model):
     email_address = models.CharField(max_length=100, unique=True)
     location_id = models.ForeignKey(Cities, on_delete=models.CASCADE)
 
