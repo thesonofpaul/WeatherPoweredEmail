@@ -11,7 +11,7 @@ class IndexView(generic.ListView):
     context_object_name = 'cities'
 
     def get_queryset(self):
-        return get_list_or_404(Cities)
+        return get_list_or_404(Cities.objects.order_by('city'))
 
 
 def submit(request):
