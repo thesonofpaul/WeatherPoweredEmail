@@ -4,7 +4,7 @@ from django.core.mail import send_mass_mail
 from django.core.management.base import BaseCommand, CommandError
 from newsletter.models import EmailList
 from urllib.request import urlopen
-from json import loads
+import json
 import datetime
 from re import match
 
@@ -23,8 +23,8 @@ def get_email_subject(temp_current, temp_avg, condition):
 def get_date_range():
     today = datetime.datetime.now()
     delta = datetime.timedelta(days=15)
-    start = (today - delta).strftime("%mm%dd")
-    end = (today + delta).strftime("%mm%dd")
+    start = (today - delta).strftime("%m%d")
+    end = (today + delta).strftime("%m%d")
     return '{}{}'.format(start, end)
 
 
@@ -38,8 +38,8 @@ def get_weather(city, state):
 
     try:
         f = urlopen(wunderground_url.format(my_key, dates, state, city))
-        json_string = f.read()
-        parsed_json = loads(json_string)
+        json_string = f.read().decode('utf-8')
+        parsed_json = json.loads(json_string)
         condition = parsed_json['current_observation']['weather']
         temp_current = int(parsed_json['current_observation']['temp_f'])
         temp_avg_low = int(parsed_json['trip']['temp_low']['avg']['F'])
@@ -68,7 +68,6 @@ class Command(BaseCommand):
             temp_current, temp_avg, condition = get_weather(item.location.city, item.location.state)
             email_list.append(tuple(compose_email(temp_current, temp_avg, condition, item.email_address)))
 
-        print(len(email_list))
         try:
             send_mass_mail(email_list)
         except SMTPException:
