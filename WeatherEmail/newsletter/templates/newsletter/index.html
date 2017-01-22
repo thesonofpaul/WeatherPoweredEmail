@@ -20,7 +20,7 @@
                 <div class="weather-inner">
                     <h1 class="email-header">Weather Powered Email</h1>
 
-                    {% if error_message %}<h4 class="invalid-input"><strong>{{ error_message }}</strong></h4>{% endif %}
+                    {% if error_message %}<h4 class="invalid-input"><strong>{{ error_message|linebreaksbr }}</strong></h4>{% endif %}
 
                     <form action="{% url 'submit' %}" method="post">
                         {% csrf_token %}

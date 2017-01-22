@@ -21,9 +21,13 @@ class IndexView(generic.ListView):
 
 
 def submit(request):
+    if request.POST['email_address'] is None or request.POST['email_address'] == "":
+        return render(request, "newsletter/index.html",
+                      {'cities': get_list_or_404(Cities),
+                       'error_message': "Invalid selection"})
     try:
         new_email = request.POST['email_address']
-        new_location = Cities.objects.get(id=request.POST['city'])
+        new_location = Cities.objects.get(id=int(request.POST['city']))
     except (KeyError, ValueError, Cities.DoesNotExist):
         return render(request, "newsletter/index.html",
                       {'cities': get_list_or_404(Cities),
@@ -36,8 +40,8 @@ def submit(request):
         else:
             return render(request, "newsletter/index.html",
                           {'cities': get_list_or_404(Cities),
-                           'error_message': "Houston, we have a problem...<br />"
-                                            "Looks like this email has already been subscribed.<br />"
+                           'error_message': "Houston, we have a problem...\n"
+                                            "Looks like this email has already been subscribed.\n"
                                             "Please try again."})
 
 
