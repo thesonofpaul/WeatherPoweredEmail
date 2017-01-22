@@ -24,10 +24,10 @@ def submit(request):
     try:
         new_email = request.POST['email_address']
         new_location = Cities.objects.get(id=request.POST['city'])
-    except (KeyError, Cities.DoesNotExist):
+    except (KeyError, ValueError, Cities.DoesNotExist):
         return render(request, "newsletter/index.html",
                       {'cities': get_list_or_404(Cities),
-                       'error_list': "Invalid selection"})
+                       'error_message': "Invalid selection"})
     else:
         if not EmailList.objects.filter(email_address=new_email).exists():
             new_entry = EmailList(email_address=new_email, location=new_location)

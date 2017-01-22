@@ -3,22 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <title>Weather Powered Email</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!-- Loads CSS file -->
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'newsletter/style.css' %}" />
 </head>
 <body>
-    <h1>Weather Powered Email</h1>
+    <div class="container">
+        <div class="row main">
+            <div class="weather-container main-center">
+                <div class="weather-inner">
+                    <h1 class="email-header">Weather Powered Email</h1>
 
-    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+                    {% if error_message %}<h4 class="invalid-input"><strong>{{ error_message }}</strong></h4>{% endif %}
 
-    <form action="{% url 'submit' %}" method="post">
-        {% csrf_token %}
-        <input type="email" name="email_address" id="email_address" />
-        <div>
-            {% for city in cities %}
-                <input type="radio" name="city" id="city{{ city.id }}" value="{{ city.id }}">
-                    <label for="city{{ city.id }}">{{ city }}</label><br />
-            {% endfor %}
+                    <form action="{% url 'submit' %}" method="post">
+                        {% csrf_token %}
+                        <label>Email Address</label>
+                        <br>
+                        <input type="email" name="email_address" id="email_address" placeholder="e.g. me@gmail.com" />
+                        <div class="form-group">
+                            <label>Location</label>
+                            <br>
+                            <label for="city-dropdown"></label>
+                            <select name="city" type="dropdown" class="dropdown" id="city-dropdown">
+                                <option selected>Select city</option>
+                                {% for city in cities %}
+                                    <option value="{{ city.id }}" for="city{{ city.id }}">{{ city }}</option><br />
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <input type="submit" value="Subscribe" />
+                    </form>
+                </div>
+            </div>
         </div>
-        <input type="submit" value="Subscribe" />
-    </form>
+    </div>
 </body>
 </html>

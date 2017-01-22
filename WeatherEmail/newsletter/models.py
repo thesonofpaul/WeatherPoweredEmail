@@ -10,7 +10,7 @@ class Cities(models.Model):
 
 
 class EmailList(models.Model):
-    email_address = models.CharField(max_length=100, unique=True)
+    email_address = models.CharField(max_length=100, unique=True, null=False)
     location = models.ForeignKey(Cities, on_delete=models.CASCADE)
 
     def __str__(self):
