@@ -5,7 +5,7 @@ from django.views import generic
 
 from .models import Cities, EmailList
 
-
+# newsletter subscription page
 class IndexView(generic.ListView):
     template_name = 'newsletter/index.html'
     context_object_name = 'cities'
@@ -13,8 +13,9 @@ class IndexView(generic.ListView):
     def get_queryset(self):
         return get_list_or_404(Cities.objects.order_by('city'))
 
-
+# handles newsletter submit request
 def submit(request):
+    # invalid email address
     if request.POST['email_address'] is None or request.POST['email_address'] == "":
         return render(request, "newsletter/index.html",
                       {'cities': get_list_or_404(Cities),
@@ -27,6 +28,7 @@ def submit(request):
                       {'cities': get_list_or_404(Cities),
                        'error_message': "Invalid selection. Please try again."})
     else:
+        # check if email address already exists
         if not EmailList.objects.filter(email_address=new_email).exists():
             new_entry = EmailList(email_address=new_email, location=new_location)
             new_entry.save()
@@ -37,7 +39,7 @@ def submit(request):
                            'error_message': "It looks like this email has already been used.\n"
                                             "Please try again."})
 
-
+# subscription confirmation page
 class ResultView(generic.ListView):
     template_name = 'newsletter/result.html'
     context_object_name = 'entry'

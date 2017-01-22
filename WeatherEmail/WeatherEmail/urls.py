@@ -26,6 +26,7 @@ urlpatterns = [
 
 ]
 
+# grab css files
 if getattr(settings, 'FORCE_SERVE_STATIC', False):
     settings.DEBUG = True
     urlpatterns += static(

@@ -9,7 +9,7 @@ import json
 import datetime
 from re import search
 
-
+# return false if bad weather, true if good weather, and none if clear weather
 def get_condition(temp_current, temp_avg, condition):
     condition = condition.lower()
     temp_delta = temp_current - temp_avg
@@ -21,7 +21,7 @@ def get_condition(temp_current, temp_avg, condition):
     else:
         return None
 
-
+# used to get ~ a month worth of historical weather data to compare with current conditions
 def get_date_range():
     today = datetime.datetime.now()
     delta = datetime.timedelta(days=15)
@@ -29,7 +29,7 @@ def get_date_range():
     end = (today + delta).strftime("%m%d")
     return '{}{}'.format(start, end)
 
-
+# pulls all weather data from wunderground using their api
 def get_weather(city, state):
     wunderground_url = 'http://api.wunderground.com/api/{}/{}/conditions/q/{}/{}.json'
     my_key = '4207ee15e36205ec'
@@ -55,8 +55,9 @@ def get_weather(city, state):
         f.close()
         return temp_current, temp_avg, condition
 
-
+# formats email html and creates EmailMultiAlternatives object to be sent to respective recipient
 def compose_email(city, state, temp_current, temp_avg, condition, recipient):
+    # email address in settings.py used to send all emails
     sender_address = 'weather.powered.email.test@gmail.com'
     email_template = get_template('newsletter/email.html')
 
