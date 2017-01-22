@@ -14,7 +14,7 @@ def get_condition(temp_current, temp_avg, condition):
     condition = condition.lower()
     temp_delta = temp_current - temp_avg
     # assuming that any precipitation means bad weather, check those first
-    if temp_delta <= -5 or match("(rain|sleet|flurries|snow|storm|drizzle)", condition) is not None:
+    if temp_delta <= -5 or match("(rain|sleet|flurries|snow|storm|drizzle|overcast)", condition) is not None:
         return False
     elif temp_delta >= 5 or ('sun' in condition and 'part' not in condition):
         return True
