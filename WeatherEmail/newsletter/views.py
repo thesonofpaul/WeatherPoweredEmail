@@ -13,6 +13,7 @@ class IndexView(generic.ListView):
     def get_queryset(self):
         return get_list_or_404(Cities)
 
+
 # def index(request):
 #     cities = get_list_or_404(Cities)
 #     context = {'cities': cities}
@@ -28,9 +29,16 @@ def submit(request):
                       {'cities': get_list_or_404(Cities),
                        'error_list': "Invalid selection"})
     else:
-        new_entry = EmailList(email_address=new_email, location_id=new_location)
-        new_entry.save()
-        return HttpResponseRedirect(reverse('result', args=(new_entry.id,)))
+        if not EmailList.objects.filter(email_address=new_email).exists():
+            new_entry = EmailList(email_address=new_email, location=new_location)
+            new_entry.save()
+            return HttpResponseRedirect(reverse('result', args=(new_entry.id,)))
+        else:
+            return render(request, "newsletter/index.html",
+                          {'cities': get_list_or_404(Cities),
+                           'error_message': "Houston, we have a problem...<br />"
+                                            "Looks like this email has already been subscribed.<br />"
+                                            "Please try again."})
 
 
 class ResultView(generic.ListView):
