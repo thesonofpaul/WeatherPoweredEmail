@@ -14,24 +14,18 @@ class IndexView(generic.ListView):
         return get_list_or_404(Cities)
 
 
-# def index(request):
-#     cities = get_list_or_404(Cities)
-#     context = {'cities': cities}
-#     return render(request, 'newsletter/index.html', context)
-
-
 def submit(request):
     if request.POST['email_address'] is None or request.POST['email_address'] == "":
         return render(request, "newsletter/index.html",
                       {'cities': get_list_or_404(Cities),
-                       'error_message': "Invalid selection"})
+                       'error_message': "Invalid selection. Please try again."})
     try:
         new_email = request.POST['email_address']
         new_location = Cities.objects.get(id=int(request.POST['city']))
     except (KeyError, ValueError, Cities.DoesNotExist):
         return render(request, "newsletter/index.html",
                       {'cities': get_list_or_404(Cities),
-                       'error_message': "Invalid selection"})
+                       'error_message': "Invalid selection. Please try again."})
     else:
         if not EmailList.objects.filter(email_address=new_email).exists():
             new_entry = EmailList(email_address=new_email, location=new_location)
@@ -40,8 +34,7 @@ def submit(request):
         else:
             return render(request, "newsletter/index.html",
                           {'cities': get_list_or_404(Cities),
-                           'error_message': "Houston, we have a problem...\n"
-                                            "Looks like this email has already been subscribed.\n"
+                           'error_message': "It looks like this email has already been used.\n"
                                             "Please try again."})
 
 
@@ -51,7 +44,3 @@ class ResultView(generic.ListView):
 
     def get_queryset(self):
         return EmailList.objects.latest('id')
-
-# def result(request, question_id):
-#     entry = get_object_or_404(Email_List, pk=question_id)
-#     return render(request, 'newsletter/result.html', {'entry': entry})
