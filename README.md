@@ -1,5 +1,5 @@
 # WeatherPoweredEmail
-code challenge
+
 This is the code for a weather powered email singup page with functional email newsletter.
 
 Noteworthy commands (from command-line)
